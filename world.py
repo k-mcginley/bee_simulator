@@ -1,13 +1,19 @@
 class World:
-    def __init__(self, temp: float, humidity: int, air_pollution: int, num_beehives: int, num_flowers: int):
-        self.__temp = temp
-        self.__humidity = humidity
-        self.__air_pollution = air_pollution
-        self.__num_beehives = num_beehives
-        self.__num_flowers = num_flowers
+    def __init__(self):
+        self.__temp = input("Input the world's temperature: ")
+        self.__humidity = input("Input the world's humidity level: ")
+        self.__air_pollution = int(input("Input the world's air pollution: "))
+        self.__num_beehives = int(input("Input the starting number of beehives: "))
+        self.__num_flowers = int(input("Input the number of flowers: "))
         self.__entities = []
+
+        # pygame
+        self.__screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("My Pygame Window")
 
         # constraints:
         self.__MAX_BEES = 10000
 
-    
+        
+
+        
