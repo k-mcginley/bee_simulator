@@ -5,3 +5,4 @@ FPS = 60
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+GRASS_GREEN = (114, 150, 77)

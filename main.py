@@ -11,5 +11,5 @@ pygame.init()
 
 def main():
     world = World()
-    world.start()
+    world.run()
 

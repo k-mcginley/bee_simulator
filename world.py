@@ -1,3 +1,8 @@
+import sys
+import pygame
+from config import *
+from beehive import Beehive
+
 class World:
     def __init__(self):
         self.__temp = input("Input the world's temperature: ")
@@ -8,14 +13,14 @@ class World:
         self.__entities = []
 
         # pygame
-        self.__screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("My Pygame Window")
-        self.__clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
         # constraints:
         self.__MAX_BEES = 10000
 
-    def start():
+    def run(self):
         # Game state variable
         running = True
 
@@ -38,22 +43,23 @@ class World:
 
             # --- Drawing / Rendering Code ---
             # Clear screen with a background color
-            screen.fill(BLACK)
+            self.screen.fill(GRASS_GREEN)
 
             # (Draw your game sprites and shapes here)
-            screen.blit(bee_img, character_rect)
+            beehive = Beehive(50, 50, 50)
+            for i in range(50):
+                beehive.create_bee()
+            for bee in beehive.bees:
+                bee.draw()
+            
 
             # Refresh the screen display
             pygame.display.flip()
 
             # --- Frame Rate Management ---
             # Limits the loop to the specified FPS
-            clock.tick(FPS)
+            self.clock.tick(FPS)
 
         # 6. Clean Up and Exit
         pygame.quit()
         sys.exit()
-
-
-
-            
