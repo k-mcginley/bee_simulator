@@ -1,13 +1,12 @@
 from beehive import Beehive
 from entity import Entity
+from config import *
 import pygame
 
 class Bee(Entity):
 
     bee_size = 5
     bee_img = "assets/bee_image.png"
-    NECTAR_LIMIT = 10
-    BEE_LIMIT = 10000
 
 
     def __init__(self, x, y, id, beehive: Beehive):
@@ -20,4 +19,13 @@ class Bee(Entity):
         self.rect.topleft = (100, 100)
 
     def move(self):
-        pass
+        if beehive.x > self.x:
+            self.x += self._speed
+        elif beehive.x < self.x:
+            self.x -= self._speed
+        elif beehive.y > self.y:
+            self.y += self._speed
+        elif beehive.y < self.y:
+            self.y -= self._speed
+
+        

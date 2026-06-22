@@ -5,8 +5,8 @@ import pygame
 pygame.init()
 
 # 2. Game Constants
-SCREEN_WIDTH = 1500
-SCREEN_HEIGHT = 1000
+SCREEN_WIDTH = 1300
+SCREEN_HEIGHT = 800
 FPS = 60
 
 # Color definitions (RGB)
@@ -22,9 +22,10 @@ clock = pygame.time.Clock()
 
 
 bee_img = pygame.image.load("assets/bee_image.png").convert_alpha()
+bee_img = pygame.transform.scale(bee_img, (200, 200))
 
-character_rect = bee_img.get_rect()
-character_rect.topleft = (0, 0)
+rect = bee_img.get_rect()
+rect.topleft = (100, 100)
 
 def main():
     # Game state variable
@@ -46,13 +47,22 @@ def main():
 
         # --- Game Logic / State Updates ---
         # (Move players, check collisions, update scores here)
+        mouse_pos = pygame.mouse.get_pos()
+        if mouse_pos[0] > rect.x:
+            rect.x += 2
+        if mouse_pos[0] < rect.x:
+            rect.x -= 2
+        if mouse_pos[1] > rect.y:
+            rect.y += 2
+        if mouse_pos[1] < rect.y:
+            rect.y -= 2
 
         # --- Drawing / Rendering Code ---
         # Clear screen with a background color
         screen.fill(BLACK)
 
         # (Draw your game sprites and shapes here)
-        screen.blit(bee_img, character_rect)
+        screen.blit(bee_img, rect)
 
         # Refresh the screen display
         pygame.display.flip()

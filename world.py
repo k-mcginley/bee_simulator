@@ -1,7 +1,6 @@
 import sys
 import pygame
 from config import *
-from beehive import Beehive
 
 class World:
     def __init__(self):
@@ -17,49 +16,40 @@ class World:
         pygame.display.set_caption("My Pygame Window")
         self.clock = pygame.time.Clock()
 
-        # constraints:
-        self.__MAX_BEES = 10000
 
     def run(self):
-        # Game state variable
+        # game state
         running = True
 
-        # 5. Main Game Loop
+        # main game loop
         while running:
-
-            # --- Event Handling Loop ---
+            # event handling loop
             for event in pygame.event.get():
-                # Check if user clicked the window's close button
+                # check if user clicked close button
                 if event.type == pygame.QUIT:
                     running = False
 
-                # Example Keyboard input detection
+                # example keyboard input detection
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
 
-            # --- Game Logic / State Updates ---
-            # (Move players, check collisions, update scores here)
+            # move players, check collisions, update scores here
 
-            # --- Drawing / Rendering Code ---
-            # Clear screen with a background color
+            # clear screen with a background color
             self.screen.fill(GRASS_GREEN)
 
-            # (Draw your game sprites and shapes here)
+            # draw game sprites and shapes here
             beehive = Beehive(50, 50, 50)
             for i in range(50):
                 beehive.create_bee()
             for bee in beehive.bees:
                 bee.draw()
             
-
-            # Refresh the screen display
             pygame.display.flip()
 
-            # --- Frame Rate Management ---
-            # Limits the loop to the specified FPS
             self.clock.tick(FPS)
 
-        # 6. Clean Up and Exit
+
         pygame.quit()
         sys.exit()

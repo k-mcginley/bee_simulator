@@ -1,16 +1,12 @@
 import random
 from entity import Entity
 from bee import Bee
+from config import *
 
 class Beehive(Entity):
 
     num_beehives = 0
     beehive_img = "" # make later
-
-    # constraints: 
-    MAX_POPULATION = 500
-    MAX_FLYING = 100
-    MAX_HONEY_COUNT = 200
 
     def __init__(self, x, y, starting_honey_count):
         super().__init__(x, y, Beehive.beehive_img)
