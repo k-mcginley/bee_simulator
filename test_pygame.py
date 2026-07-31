@@ -8,6 +8,7 @@ pygame.init()
 SCREEN_WIDTH = 1300
 SCREEN_HEIGHT = 800
 FPS = 60
+SPEED = 3
 
 # Color definitions (RGB)
 BLACK = (0, 0, 0)
@@ -21,11 +22,11 @@ pygame.display.set_caption("My Pygame Window")
 clock = pygame.time.Clock()
 
 
-bee_img = pygame.image.load("assets/bee_image.png").convert_alpha()
-bee_img = pygame.transform.scale(bee_img, (200, 200))
+bee_img = pygame.image.load("assets/bee_pixel.png").convert_alpha()
+bee_img = pygame.transform.scale(bee_img, (20, 20))
 
 rect = bee_img.get_rect()
-rect.topleft = (100, 100)
+rect.center = (100, 100)
 
 def main():
     # Game state variable
@@ -45,33 +46,37 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-        # --- Game Logic / State Updates ---
-        # (Move players, check collisions, update scores here)
         mouse_pos = pygame.mouse.get_pos()
-        if mouse_pos[0] > rect.x:
-            rect.x += 2
-        if mouse_pos[0] < rect.x:
-            rect.x -= 2
-        if mouse_pos[1] > rect.y:
-            rect.y += 2
-        if mouse_pos[1] < rect.y:
-            rect.y -= 2
+
+        # create vectors for the target and current center
+        target = pygame.math.Vector2(mouse_pos)
+        current = pygame.math.Vector2(rect.center)
+
+        distance = current.distance_to(target)
+
+        if distance > 0:
+            if distance < SPEED:
+                rect.center = mouse_pos
+            else:
+                direction = (target - current).normalize()
+                new_pos = current + direction * SPEED
+                rect.center = (int(new_pos.x), int(new_pos.y))
+
 
         # --- Drawing / Rendering Code ---
-        # Clear screen with a background color
-        screen.fill(BLACK)
+        screen.fill(WHITE)
 
-        # (Draw your game sprites and shapes here)
+        # draw game sprites and shapes here
         screen.blit(bee_img, rect)
 
-        # Refresh the screen display
+        # refresh screen display
         pygame.display.flip()
 
         # --- Frame Rate Management ---
         # Limits the loop to the specified FPS
         clock.tick(FPS)
 
-    # 6. Clean Up and Exit
+
     pygame.quit()
     sys.exit()
 

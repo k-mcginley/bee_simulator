@@ -6,7 +6,7 @@ import pygame
 class Bee(Entity):
 
     bee_size = 5
-    bee_img = "assets/bee_image.png"
+    bee_img = "assets/bee_pixel.png"
 
 
     def __init__(self, x, y, id, beehive: Beehive):
