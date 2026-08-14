@@ -4,10 +4,9 @@ import pygame
 from world import World
 
 
-pygame.init()
-
-
 def main():
+    print("hi")
     world = World()
     world.run()
 
+main()
