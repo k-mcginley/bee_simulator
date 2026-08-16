@@ -6,7 +6,7 @@ class Entity(ABC):
         #self.x = x
         #self.y = y
         self.img = pygame.image.load(img).convert_alpha()
-        self.img = pygame.transform.scale(self.img, (20, 20))
+        self.img = pygame.transform.scale(self.img, (100, 100))
         self.rect = self.img.get_rect()
         self.rect.center = (x, y)
 

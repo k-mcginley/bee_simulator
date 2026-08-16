@@ -1,4 +1,4 @@
-from beehive import Beehive
+
 from entity import Entity
 from config import *
 import pygame
@@ -9,7 +9,7 @@ class Bee(Entity):
     bee_img = "assets/bee_right.png"
 
 
-    def __init__(self, x, y, id, beehive: Beehive):
+    def __init__(self, x, y, id, beehive):
         super().__init__(x, y, Bee.bee_img)
         self.speed = 1
         self.beehive = beehive
@@ -41,6 +41,6 @@ class Bee(Entity):
             self.y -= self._speed
         '''
         
-    def update(self):
+    def update(self): # change so that targt can change
         hive_target = (self.beehive.x, self.beehive.y)
         self.move_towards(hive_target)

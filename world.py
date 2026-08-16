@@ -23,45 +23,48 @@ class World:
         self.clock = pygame.time.Clock()
 
 
-        self.beehive = Beehive(100, 100, 50)
+        self.beehive = Beehive(100, 100, self.__entities)
         self.__entities.append(self.beehive)
         
-        for i in range(50):
-            bee = Bee(400, 400, i, self.beehive)
-            self.__entities.append(bee)
         
 
 
     def run(self):
         
-        # game state
         running = True
 
-        # main game loop
         while running:
 
-            # event handling loop
             for event in pygame.event.get():
-                # check if user clicked close button
+
                 if event.type == pygame.QUIT:
                     running = False
 
-                # example keyboard input detection
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
 
-            # move players, check collisions, update scores here
+            # move players, check collisions, update scores 
             for entity in self.__entities:
                 entity.update()
 
-            # clear screen with a background color
+            # clear screen
             self.screen.fill(GRASS_GREEN)
 
-            # draw game sprites and shapes here
+            # draw game sprites and shapes 
             for entity in self.__entities:
                 entity.draw(self.screen)
+
+            for entity in self.__entities:
+                if isinstance(entity, Beehive):
+                    entity.draw(self.screen)
+
+            for entity in self.__entities:
+                if isinstance(entity, Bee):
+                    entity.draw(self.screen)
             
+            print(self.__entities)
+
             pygame.display.flip()
             self.clock.tick(FPS)
 
