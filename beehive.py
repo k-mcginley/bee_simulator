@@ -29,8 +29,8 @@ class Beehive(Entity):
 
     def create_bee(self):
         if len(self.bees) < self.max_capacity:
-            spawn_x = self.rect.centerx + random.randint(-100, 100)
-            spawn_y = self.rect.centery + random.randint(-100, 100)
+            spawn_x = self.rect.centerx + random.randint(-200, 200)
+            spawn_y = self.rect.centery + random.randint(-200, 200)
             
             new_bee = Bee(spawn_x, spawn_y, len(self.bees), self)
             self.bees.append(new_bee) # add to hive bee list
@@ -45,6 +45,6 @@ class Beehive(Entity):
         if self.honey_count > 10 and len(self.bees) < self.max_capacity: # bee spawn timer thing
             self.spawn_timer += 1
             if self.spawn_timer >= self.spawn_interval:
-                self.create_bee()
+                #self.create_bee()
                 self.honey_count -= 2  # use honey
                 self.spawn_timer = 0   # reset timer
