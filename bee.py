@@ -16,21 +16,23 @@ class Bee(Entity):
         self.nectar_count = 0
         self.id = id
 
+        self.pos = pygame.math.Vector2(x, y)
+
 
     def move_towards(self, target_pos):
         target = pygame.math.Vector2(target_pos)
-        self.pos = pygame.math.Vector2(self.rect.center)
+        
 
         distance = self.pos.distance_to(target)
 
         if distance > 0:
             if distance <= self.speed:
-                self.rect.center = target_pos
+                self.pos = target
             else:
                 direction = (target - self.pos).normalize()
                 self.pos += direction * self.speed
-                self.rect.center = (self.pos.x, self.pos.y)
 
+            self.rect.center = (int(self.pos.x), int(self.pos.y))
 
         
     def update(self): # change so that targt can change

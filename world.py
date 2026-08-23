@@ -5,6 +5,7 @@ from config import *
 
 from beehive import Beehive
 from bee import Bee
+from flower import Flower
 
 class World:
 
@@ -15,7 +16,7 @@ class World:
         self.__humidity = 5 #input("Input the world's humidity level: ")
         self.__air_pollution = 5 #int(input("Input the world's air pollution: "))
         self.__num_beehives = 2 #int(input("Input the starting number of beehives: "))
-        self.__num_flowers = 5 #int(input("Input the number of flowers: "))
+        self.__num_flowers = 10 #int(input("Input the number of flowers: "))
         self.__entities = []
 
         # pygame
@@ -28,6 +29,11 @@ class World:
             hive_x = random.randint(100, SCREEN_WIDTH - 100)
             hive_y = random.randint(100, SCREEN_HEIGHT - 100)
             beehive = Beehive(hive_x, hive_y, self.__entities)
+
+        for i in range(self.__num_flowers):
+            flower_x = random.randint(100, SCREEN_WIDTH - 100)
+            flower_y = random.randint(100, SCREEN_HEIGHT - 100)
+            flower = Flower(flower_x, flower_y, self.__entities)
         
         
         
@@ -61,6 +67,10 @@ class World:
 
             for entity in self.__entities:
                 if isinstance(entity, Beehive):
+                    entity.draw(self.screen)
+
+            for entity in self.__entities:
+                if isinstance(entity, Flower):
                     entity.draw(self.screen)
 
             for entity in self.__entities:
