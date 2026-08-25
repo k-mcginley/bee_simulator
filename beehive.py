@@ -16,19 +16,17 @@ class Beehive(Entity):
         self.larva_count = 5
         self.honey_count = STARTING_HONEY_COUNT
         self.bees = []
-        self.max_capacity = MAX_CAPACITY
         self.entity_list = entities
         self.entity_list.append(self) # add beehive to global lisg
 
         self.spawn_timer = 0
-        self.spawn_interval = 180
 
         for i in range(20): # starts w 20 bees
             self.create_bee()
 
 
     def create_bee(self):
-        if len(self.bees) < self.max_capacity:
+        if len(self.bees) < MAX_CAPACITY:
             spawn_x = self.rect.centerx + random.randint(-200, 200)
             spawn_y = self.rect.centery + random.randint(-200, 200)
             
@@ -42,9 +40,9 @@ class Beehive(Entity):
 
     def update(self):
         """manage hive logic - honey use + growth, spawning new bees, updating own bees"""
-        if self.honey_count > 10 and len(self.bees) < self.max_capacity: # bee spawn timer thing
+        if self.honey_count > 10 and len(self.bees) < MAX_CAPACITY: # bee spawn timer thing
             self.spawn_timer += 1
-            if self.spawn_timer >= self.spawn_interval:
+            if self.spawn_timer >= BEE_SPAWN_INTERVAL:
                 self.create_bee()
                 self.honey_count -= 2  # use honey
                 self.spawn_timer = 0   # reset timer

@@ -15,15 +15,14 @@ class Flower(Entity):
         
         self.nectar_count = STARTING_NECTAR_COUNT
         self.nectar_timer = 0
-        self.nectar_interval = 180
 
         self.entity_list = entities
         self.entity_list.append(self) 
 
     def update(self):
-            """nctar creation timer"""
+            """nectar creation timer"""
             if self.nectar_count < STARTING_NECTAR_COUNT:
                 self.nectar_timer += 1
-                if self.nectar_timer >= self.nectar_interval:
-                    self.nectar_count += 1  # use honey
-                    self.nectar_timer = 0   # reset timer
+                if self.nectar_timer >= NECTAR_INTERVAL:
+                    self.nectar_count += 1
+                    self.nectar_timer = 0
