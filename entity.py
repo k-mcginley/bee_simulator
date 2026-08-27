@@ -2,13 +2,16 @@ from abc import ABC, abstractmethod
 import pygame
 
 class Entity(ABC):
-    def __init__(self, x, y, img):
+    def __init__(self, x, y, entities, img):
         #self.x = x
         #self.y = y
         self.img = pygame.image.load(img).convert_alpha()
         self.img = pygame.transform.scale(self.img, (100, 100))
         self.rect = self.img.get_rect()
         self.rect.center = (x, y)
+
+        self.entity_list = entities
+        self.entity_list.append(self)
 
     @property
     def x(self):

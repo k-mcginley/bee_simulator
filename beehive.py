@@ -9,15 +9,13 @@ class Beehive(Entity):
     beehive_img = "assets/beehive_1.png"
 
     def __init__(self, x, y, entities):
-        super().__init__(x, y, Beehive.beehive_img)
+        super().__init__(x, y, entities, Beehive.beehive_img)
         Beehive.num_beehives += 1
         self._id = Beehive.num_beehives
 
         self.larva_count = 5
         self.honey_count = STARTING_HONEY_COUNT
         self.bees = []
-        self.entity_list = entities
-        self.entity_list.append(self) # add beehive to global lisg
 
         self.spawn_timer = 0
 
@@ -27,10 +25,10 @@ class Beehive(Entity):
 
     def create_bee(self):
         if len(self.bees) < MAX_CAPACITY:
-            spawn_x = self.rect.centerx + random.randint(-200, 200)
+            spawn_x = self.rect.centerx + random.randint(-200, 200) # bee spawn outside - delete later
             spawn_y = self.rect.centery + random.randint(-200, 200)
             
-            new_bee = Bee(spawn_x, spawn_y, len(self.bees), self)
+            new_bee = Bee(spawn_x, spawn_y, len(self.bees), self, self.entity_list)
             self.bees.append(new_bee) # add to hive bee list
             self.entity_list.append(new_bee) # add bee to global(?) entity list
 

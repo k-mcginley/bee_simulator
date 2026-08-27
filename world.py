@@ -16,7 +16,7 @@ class World:
         self.__humidity = 5 #input("Input the world's humidity level: ")
         self.__air_pollution = 5 #int(input("Input the world's air pollution: "))
         self.__num_beehives = 2 #int(input("Input the starting number of beehives: "))
-        self.__num_flowers = 10 #int(input("Input the number of flowers: "))
+        self.__num_flowers = 20 #int(input("Input the number of flowers: "))
         self.__entities = []
 
         # pygame
@@ -75,7 +75,8 @@ class World:
 
             for entity in self.__entities:
                 if isinstance(entity, Bee):
-                    entity.draw(self.screen)
+                    if not entity.inside_hive:
+                        entity.draw(self.screen)
             
             print(self.__entities)
 

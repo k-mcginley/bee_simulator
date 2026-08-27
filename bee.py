@@ -1,5 +1,6 @@
-
+import random
 from entity import Entity
+from flower import Flower
 from config import *
 import pygame
 
@@ -9,8 +10,8 @@ class Bee(Entity):
     bee_imgs = ["assets/bee_right.png", "assets/bee_down.png", "assets/bee_left.png", "assets/bee_up.png"]
 
 
-    def __init__(self, x, y, id, beehive):
-        super().__init__(x, y, Bee.bee_imgs[0])
+    def __init__(self, x, y, id, beehive, entities):
+        super().__init__(x, y, entities, Bee.bee_imgs[0])
         self.speed = 1
         self.beehive = beehive
         self.nectar_count = 0
@@ -21,9 +22,15 @@ class Bee(Entity):
         self.current_axis = None
         self.distance_traveled = 0
 
+        self.inside_hive = False
+        self.target = self.beehive
+        self.target_pos = (self.beehive.x, self.beehive.y)
+
 
     def move_towards(self, target_pos):
         target_x, target_y = target_pos
+        #target_x = self.target_pos[0]
+        #target_y = self.target_pos[1]
         center_x, center_y = self.rect.center
 
         distance_x = target_x - center_x
@@ -89,9 +96,47 @@ class Bee(Entity):
             else:
                 self.rect.centery = target_y
 
-        
+
+    def check_inside_hive(self):
+        if self.rect.colliderect(self.beehive.rect):
+            self.is_inside_hive = True
+        else:
+            self.is_inside_hive = False
+    
+
+    def enter_hive(self):
+        self.is_inside_hive = True
+        self.rect.center = self.beehive.rect.center
+
+
+    def leave_hive(self): #, spawn_offset_x=0, spawn_offset_y=30):
+        self.rect.centerx = self.beehive.rect.centerx #+ spawn_offset_x
+        self.rect.centery = self.beehive.rect.centery #+ spawn_offset_y
+        self.is_inside_hive = False
+
+
+    def check_target_reached(self):
+        print(self.target.rect)
+        if self.rect.colliderect(self.target.rect):
+            return True
+        else:
+            return False
+
+
+    def set_new_target(self):
+        # if not enough honey, bee will leave to collect nectar - target = flower object
+        # if at flower, bee will return to hive
+        if self.beehive.honey_count < 20: # update so limited num of bees can be flying at once
+            self.target = Flower.flowers[random.randint(0, len(Flower.flowers) - 1)]
+        else:
+            self.target = self.beehive
+        return (self.target.x, self.target.y)
+
+
     def update(self): # change so that targt can change
-        hive_target = (self.beehive.x, self.beehive.y)
-        self.move_towards(hive_target)
+        if self.check_target_reached:
+            target_pos = self.set_new_target()
+        self.move_towards(target_pos)
+        self.check_inside_hive()
 
         # fix bee facing direction
