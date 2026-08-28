@@ -98,26 +98,16 @@ class Bee(Entity):
 
 
     def check_inside_hive(self):
-        if self.rect.colliderect(self.beehive.rect):
-            self.is_inside_hive = True
+        if self.rect == self.beehive.rect:
+            self.inside_hive = True
         else:
-            self.is_inside_hive = False
-    
-
-    def enter_hive(self):
-        self.is_inside_hive = True
-        self.rect.center = self.beehive.rect.center
-
-
-    def leave_hive(self): #, spawn_offset_x=0, spawn_offset_y=30):
-        self.rect.centerx = self.beehive.rect.centerx #+ spawn_offset_x
-        self.rect.centery = self.beehive.rect.centery #+ spawn_offset_y
-        self.is_inside_hive = False
+            self.inside_hive = False
 
 
     def check_target_reached(self):
-        print(self.target.rect)
-        if self.rect.colliderect(self.target.rect):
+        if self.rect == self.target.rect:
+            print(self.rect)
+            print(self.target.rect)
             return True
         else:
             return False
@@ -134,9 +124,12 @@ class Bee(Entity):
 
 
     def update(self): # change so that targt can change
-        if self.check_target_reached:
+        if self.check_target_reached():
             target_pos = self.set_new_target()
-        self.move_towards(target_pos)
+        else:
+            target_pos = (self.target.x, self.target.y)
         self.check_inside_hive()
+        self.move_towards(target_pos)
+        
 
         # fix bee facing direction

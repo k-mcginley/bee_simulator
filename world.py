@@ -77,8 +77,7 @@ class World:
                 if isinstance(entity, Bee):
                     if not entity.inside_hive:
                         entity.draw(self.screen)
-            
-            print(self.__entities)
+        
 
             pygame.display.flip()
             self.clock.tick(FPS)
