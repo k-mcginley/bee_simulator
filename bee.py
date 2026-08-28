@@ -104,6 +104,11 @@ class Bee(Entity):
             self.inside_hive = False
 
 
+    def check_if_leave(self):
+        if self.beehive.honey_count < 20:
+            pass
+
+
     def check_target_reached(self):
         if self.rect == self.target.rect:
             print(self.rect)
@@ -116,7 +121,7 @@ class Bee(Entity):
     def set_new_target(self):
         # if not enough honey, bee will leave to collect nectar - target = flower object
         # if at flower, bee will return to hive
-        if self.beehive.honey_count < 20: # update so limited num of bees can be flying at once
+        if self.beehive.honey_count < 50: # update so limited num of bees can be flying at once
             self.target = Flower.flowers[random.randint(0, len(Flower.flowers) - 1)]
         else:
             self.target = self.beehive
@@ -125,10 +130,13 @@ class Bee(Entity):
 
     def update(self): # change so that targt can change
         if self.check_target_reached():
+            #if self.target != self.beehive:
             target_pos = self.set_new_target()
+            #else:
+                #self.inside_hive = True
+                #self.target = None
         else:
             target_pos = (self.target.x, self.target.y)
-        self.check_inside_hive()
         self.move_towards(target_pos)
         
 
