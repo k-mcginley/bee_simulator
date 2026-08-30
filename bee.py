@@ -22,9 +22,9 @@ class Bee(Entity):
         self.current_axis = None
         self.distance_traveled = 0
 
-        self.inside_hive = False
+        self.inside_hive = True
         self.target = self.beehive
-        self.target_pos = (self.beehive.x, self.beehive.y)
+        #self.target_pos = (self.beehive.x, self.beehive.y)
 
 
     def move_towards(self, target_pos):
@@ -68,7 +68,6 @@ class Bee(Entity):
         elif self.current_axis == "y" and abs(distance_y) <= tolerance and abs(distance_x) > tolerance:
             self.current_axis = "x"
             self.distance_traveled = 0
-
         
         if self.current_axis == "x":
             if abs(distance_x) > tolerance:
@@ -104,21 +103,24 @@ class Bee(Entity):
             self.inside_hive = False
 
 
-    def check_if_leave(self):
-        if self.beehive.honey_count < 20:
-            pass
+    def can_leave(self):
+        if self.beehive.honey_count < 40 and self.beehive:
+            return True
 
 
     def check_target_reached(self):
-        if self.rect == self.target.rect:
-            print(self.rect)
-            print(self.target.rect)
-            return True
-        else:
-            return False
+        try:
+            if self.rect == self.target.rect:
+                print(self.rect)
+                print(self.target.rect)
+                return True
+            else:
+                return False
+        except AttributeError:
+            pass
 
 
-    def set_new_target(self):
+    def determine_new_target(self):
         # if not enough honey, bee will leave to collect nectar - target = flower object
         # if at flower, bee will return to hive
         if self.beehive.honey_count < 50: # update so limited num of bees can be flying at once
@@ -129,15 +131,21 @@ class Bee(Entity):
 
 
     def update(self): # change so that targt can change
-        if self.check_target_reached():
-            #if self.target != self.beehive:
-            target_pos = self.set_new_target()
-            #else:
-                #self.inside_hive = True
-                #self.target = None
+
+        if self.target != None:
+            if self.check_target_reached():
+                old_target = self.target
+                self.target = None
+                if old_target == self.beehive:
+                    random_chance = random.randint(0, 1)
+                    if random_chance == 1:
+                        target_pos = self.determine_new_target()
+                else:
+                    target_pos = (self.beehive.x, self.beehive.y)
+            
+            self.move_towards(target_pos)
         else:
-            target_pos = (self.target.x, self.target.y)
-        self.move_towards(target_pos)
+            pass
         
 
         # fix bee facing direction

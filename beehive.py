@@ -16,6 +16,7 @@ class Beehive(Entity):
         self.larva_count = 5
         self.honey_count = STARTING_HONEY_COUNT
         self.bees = []
+        self.bees_flying = []
 
         self.spawn_timer = 0
 
