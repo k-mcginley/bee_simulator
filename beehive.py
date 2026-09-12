@@ -1,6 +1,7 @@
 import random
 from entity import Entity
 from bee import Bee
+from flower import Flower
 from config import *
 
 class Beehive(Entity):
@@ -26,8 +27,8 @@ class Beehive(Entity):
 
     def create_bee(self):
         if len(self.bees) < MAX_CAPACITY:
-            spawn_x = self.rect.centerx + random.randint(-200, 200) # bee spawn outside - delete later
-            spawn_y = self.rect.centery + random.randint(-200, 200)
+            spawn_x = self.rect.centerx# + random.randint(-200, 200) # bee spawn outside - delete later
+            spawn_y = self.rect.centery# + random.randint(-200, 200)
             
             new_bee = Bee(spawn_x, spawn_y, len(self.bees), self, self.entity_list)
             self.bees.append(new_bee) # add to hive bee list
@@ -35,6 +36,19 @@ class Beehive(Entity):
 
             return new_bee
         return None
+
+
+    def dispatch_foraging_squad(self):
+        # Find all bees currently inside this hive
+        idle_bees = [bee for bee in self.bees if bee.inside_hive]
+
+        if idle_bees:
+            # Pick a random number of bees to leave (less than 10)
+            squad_size = min(len(idle_bees), random.randint(1, 8))
+            
+            for i in range(squad_size):
+                bee = idle_bees[i]
+                bee.leave_hive(Flower.flowers)  # Pass a Flower reference here if you have a flower list!
 
 
     def update(self):
@@ -45,3 +59,6 @@ class Beehive(Entity):
                 self.create_bee()
                 self.honey_count -= 2  # use honey
                 self.spawn_timer = 0   # reset timer
+        
+        if self.honey_count < 50: #and temperature > 10:
+            self.dispatch_foraging_squad()

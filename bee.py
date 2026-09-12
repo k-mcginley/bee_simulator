@@ -23,7 +23,7 @@ class Bee(Entity):
         self.distance_traveled = 0
 
         self.inside_hive = True
-        self.target = self.beehive
+        self.target = None
         #self.target_pos = (self.beehive.x, self.beehive.y)
 
 
@@ -103,12 +103,8 @@ class Bee(Entity):
             self.inside_hive = False
 
 
-    def can_leave(self):
-        if self.beehive.honey_count < 40 and self.beehive:
-            return True
-
-
     def check_target_reached(self):
+        '''
         try:
             if self.rect == self.target.rect:
                 print(self.rect)
@@ -118,6 +114,34 @@ class Bee(Entity):
                 return False
         except AttributeError:
             pass
+        '''
+        if self.target is None:
+            return False
+        
+
+        if hasattr(self.target, 'rect'):
+            target_pos = (self.target.x, self.target.y)
+        else:
+            target_pos = self.target
+
+        target_hitbox = pygame.Rect(target_pos[0] - 5, target_pos[1] - 5, 10, 10)
+
+        return self.rect.colliderect(target_hitbox)
+
+
+    def leave_hive(self, target_flower=None):
+        """Called by Beehive to dispatch this bee into the world."""
+        self.inside_hive = False
+        self.rect.center = self.beehive.rect.center
+        #self.target = target_flower if target_flower else self.get_random_wander_point()
+        self.target = Flower.flowers[random.randint(0, len(Flower.flowers) - 1)] if target_flower else self.get_random_wander_point()
+
+    
+    def get_random_wander_point(self):
+        """Fallback target if no flowers are nearby."""
+        offset_x = random.randint(-150, 150)
+        offset_y = random.randint(-150, 150)
+        return (self.beehive.rect.centerx + offset_x, self.beehive.rect.centery + offset_y)
 
 
     def determine_new_target(self):
@@ -131,9 +155,11 @@ class Bee(Entity):
 
 
     def update(self): # change so that targt can change
-
+        '''
+        target_pos = (self.beehive.x, self.beehive.y)
         if self.target != None:
             if self.check_target_reached():
+                print("yes")
                 old_target = self.target
                 self.target = None
                 if old_target == self.beehive:
@@ -146,6 +172,33 @@ class Bee(Entity):
             self.move_towards(target_pos)
         else:
             pass
+        '''
+        if self.inside_hive:
+            return
+
+        if hasattr(self.target, 'rect'):
+            target_pos = self.target.rect.center
+        elif self.target:
+            target_pos = self.target
+        else:
+            target_pos = self.beehive.rect.center
+
+        if self.check_target_reached():
+            if self.target == self.beehive or self.target == self.beehive.rect.center:
+                # Returned home safely
+                self.inside_hive = True
+                self.target = None
+                if self.has_nectar:
+                    self.beehive.honey_count += 5
+                    self.has_nectar = False
+                return
+            else:
+                # Reached flower/wander point -> gather nectar and head back
+                self.has_nectar = True
+                self.target = self.beehive.rect.center
+
+        # 4. Move toward current target
+        self.move_towards(target_pos)
         
 
         # fix bee facing direction
